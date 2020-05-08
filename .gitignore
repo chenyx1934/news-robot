@@ -1,0 +1,16 @@
+*/.settings
+*/target
+*target
+*/.settings
+*/target
+*.project
+*.classpath
+*.idea
+*.vscode
+/build/
+/bin/
+*node_modules
+*/log
+.env
+*.memory-card.json
+package-lock.json
