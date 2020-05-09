@@ -1,5 +1,8 @@
 const config = require('../config/index')
 const exRate = require('../service/exchangeRate')
+const tlAI = require('../service/talkRobot')
+
+
 async function onMessage(msg) {
     console.log(`msg : ${msg}`)
     const contact = msg.from()
@@ -11,25 +14,25 @@ async function onMessage(msg) {
         return
     }
     if (msg.self()) {
-        let res = await exRate.getSingleRate(text)
-        contact.say('别闹~')
+        let res = await tlAI.tlReplay(text, contact.id)
         contact.say(res)
         return // skip self
     }
     if (room) {
         const topic = await room.topic()
-        if (await msg.mentionSelf() && config.groups.indexOf(topic) != -1) {
-            console.info('this message were mentioned me! [You were mentioned] tip ([有人@我]的提示)')
-            console.info(`Room: ${topic} Contact: ${contact.name()} Text: ${text}`)
-            let res = await exRate.getSingleRate(text)
-            await room.say(res)
-        } else {
-            if (config.groups.indexOf(topic) != -1) {
+        console.info(`Room: ${topic} Contact: ${contact.name()} Text: ${text}`)
+
+        if (config.groups.indexOf(topic) != -1) {
+            if (text.startsWith('#')) {//汇率查询
                 let res = await exRate.getSingleRate(text)
+                await room.say(res)
+            }
+            else {//AI对话
+                let res = await tlAI.tlReplay(text, contact.id)
                 room.say(res)
             }
-            // console.info(`Room: ${topic} Contact: ${contact.name()} Text: ${text}`)
-            //  room.say('别闹~')
+
+        } else {
         }
     } else {
 

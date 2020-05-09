@@ -4,7 +4,6 @@
 */.settings
 */target
 *.project
-*.classpath
 *.idea
 *.vscode
 /build/
